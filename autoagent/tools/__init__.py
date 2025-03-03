@@ -1,33 +1,45 @@
-# from .code_knowledge import gen_code_tree_structure
-# from .execution import execute_command
-# from .files import read_file, create_file, write_file, list_files, create_directory
-# from .PythonAction import run_python
-# from .rag_code import code_rag
-# from .tool_retriever import get_api_doc
-# from .rag_code_tree import code_tree_rag
-# from .inner import case_resolved
-# from .code_report import check_tool, check_agent
-# from .github_ops import get_current_branch, get_diff, push_changes, submit_pull_request
-
-# import os
-# import importlib
-# from autoagent.registry import registry
-
-# # 获取当前目录下的所有 .py 文件
-# current_dir = os.path.dirname(__file__)
-# for file in os.listdir(current_dir):
-#     if file.endswith('.py') and not file.startswith('__'):
-#         module_name = file[:-3]
-#         importlib.import_module(f'autoagent.tools.{module_name}')
-
-# # 导出所有注册的工具
-# globals().update(registry.tools)
-
-# __all__ = list(registry.tools.keys())
-
+from autoagent.registry import registry, register_tool, register_plugin_tool
 import os
 import importlib
-from autoagent.registry import registry
+from typing import Union, Optional
+from autoagent.types import Result
+from autoagent.environment.markdown_browser import RequestsMarkdownBrowser
+from autoagent.environment import LocalEnv
+
+# Explicit imports for commonly used tools
+from .file_surfer_tool import (
+    open_local_file,
+    page_up_markdown,
+    page_down_markdown,
+    find_on_page_ctrl_f,
+    find_next,
+    visual_question_answering
+)
+from .terminal_tools import (
+    execute_command,
+    list_files,
+    read_file,
+    create_file,
+    write_file,
+    create_directory
+)
+from .web_tools import (
+    web_search,
+    download_url,
+    click
+)
+from .rag_tools import (
+    rag
+)
+from .rag_code import (
+    code_rag
+)
+from .tool_utils import (
+    get_current_time
+)
+from .code_knowledge import (
+    gen_code_tree_structure
+)
 
 def import_tools_recursively(base_dir: str, base_package: str):
     """Recursively import all tools in .py files

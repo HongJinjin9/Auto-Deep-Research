@@ -1,30 +1,13 @@
-# from autoagent.agents.programming_agent import get_programming_agent
-# from autoagent.agents.tool_retriver_agent import get_tool_retriver_agent
-# from autoagent.agents.agent_check_agent import get_agent_check_agent
-# from autoagent.agents.tool_check_agent import get_tool_check_agent
-# from autoagent.agents.github_agent import get_github_agent
-# from autoagent.agents.programming_triage_agent import get_programming_triage_agent
-# from autoagent.agents.plan_agent import get_plan_agent
-
-# import os
-# import importlib
-# from autoagent.registry import registry
-
-# # 获取当前目录下的所有 .py 文件
-# current_dir = os.path.dirname(__file__)
-# for file in os.listdir(current_dir):
-#     if file.endswith('.py') and not file.startswith('__'):
-#         module_name = file[:-3]
-#         importlib.import_module(f'autoagent.agents.{module_name}')
-
-# # 导出所有注册的 agent 创建函数
-# globals().update(registry.agents)
-
-# __all__ = list(registry.agents.keys())
-
 import os
 import importlib
 from autoagent.registry import registry
+
+# Explicitly import the system triage agent
+from autoagent.agents.system_agent.system_triage_agent import get_system_triage_agent
+# Import other system agents
+from autoagent.agents.system_agent.filesurfer_agent import get_filesurfer_agent
+from autoagent.agents.system_agent.programming_agent import get_coding_agent
+from autoagent.agents.system_agent.websurfer_agent import get_websurfer_agent
 
 def import_agents_recursively(base_dir: str, base_package: str):
     """Recursively import all agents in .py files
@@ -61,4 +44,10 @@ import_agents_recursively(current_dir, 'autoagent.agents')
 globals().update(registry.agents)
 globals().update(registry.plugin_agents)
 
-__all__ = list(registry.agents.keys())
+# Add system agents explicitly to __all__
+__all__ = list(registry.agents.keys()) + [
+    'get_system_triage_agent',
+    'get_filesurfer_agent',
+    'get_coding_agent',
+    'get_websurfer_agent'
+]
